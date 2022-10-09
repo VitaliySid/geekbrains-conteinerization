@@ -1,0 +1,16 @@
+Name:             rm-ingress
+Labels:           <none>
+Namespace:        gb-4
+Address:          10.0.0.5
+Ingress Class:    <none>
+Default backend:  <default>
+Rules:
+  Host        Path  Backends
+  ----        ----  --------
+  *           
+              /   gb-rm-service:3000 (10.100.185.136:3000,10.100.224.195:3000)
+Annotations:  kubernetes.io/ingress.class: nginx
+Events:
+  Type    Reason  Age                  From                      Message
+  ----    ------  ----                 ----                      -------
+  Normal  Sync    2m3s (x2 over 3m2s)  nginx-ingress-controller  Scheduled for sync

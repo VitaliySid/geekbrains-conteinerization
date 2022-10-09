@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gb-pg-deployment
+  name: gb-rm-deployment
 spec:
   replicas: 1
   selector:
@@ -16,10 +16,10 @@ spec:
         app: gb-app
     spec:
       containers:
-        - image: postgres:10.13
-          name: postgres
+        - image: redmine:4.1.1
+          name: redmine
           ports:
-            - containerPort: 5432
+            - containerPort: 3000
           resources:
             requests:
               cpu: 300m
@@ -27,23 +27,22 @@ spec:
             limits:
               cpu: 500m
               memory: 400Mi
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/postgresql/data
           env:
-            - name: POSTGRES_USER
+            - name: REDMINE_DB_POSTGRES
+              value: gb-pg-service
+            - name: REDMINE_DB_USERNAME
               value: testuser
-            - name: POSTGRES_PASSWORD
+            - name: REDMINE_DB_PASSWORD 
               valueFrom:
                 secretKeyRef:
                   name: db-secret
                   key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
+            - name: REDMINE_DB_DATABASE
               value: testdatabase
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: db-pvc
+            - name: REDMINE_SECRET_KEY_BASE 
+              valueFrom:
+                secretKeyRef:
+                  name: redmine-secret
+                  key: REDMINE_SECRET_KEY_BASE
+
 
